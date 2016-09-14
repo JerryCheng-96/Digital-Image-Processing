@@ -21,7 +21,10 @@
     <Image Include="Lenna_8-bit.bmp">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="Lenna_8-bit_Play.bmp">
+    <Image Include="Lenna_BW.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="testwrite.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
@@ -29,7 +32,7 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="bitmap_8-bit_GreyScale.cpp">
+    <ClCompile Include="bitmap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

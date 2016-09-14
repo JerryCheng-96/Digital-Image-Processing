@@ -43,7 +43,12 @@ typedef struct BMPFileContainer
 }BMPFile;
 
 
-//Functions for 8-bit Grey Scale Bitmaps
-BMPFile* readGSBMP(char* path);
+BMPFile* readBMP(char* path);
+void writeBMP(BMPFile * bitmap, char * path);
+
+int * binaryColorTable();
+int * GSColorTable();
+
+BMPFile * GSToBin(BMPFile * ori, unsigned char thres);
+
 int* GSHist(BMPFile* bf);
-//

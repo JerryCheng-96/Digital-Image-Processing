@@ -21,10 +21,11 @@
   <ItemGroup>
     <Image Include="Lenna.bmp" />
     <Image Include="Lenna_8-bit.bmp" />
-    <Image Include="Lenna_8-bit_Play.bmp" />
+    <Image Include="Lenna_BW.bmp" />
+    <Image Include="testwrite.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bitmap_8-bit_GreyScale.cpp" />
+    <ClCompile Include="bitmap.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

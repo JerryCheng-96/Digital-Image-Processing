@@ -2,11 +2,12 @@
 
 void main()
 {
-	BMPFile * bf = readGSBMP("Lenna_8-bit.bmp");
-	int* histRes = GSHist(bf);
+	BMPFile * bmpBW = readBMP("Lenna_BW.bmp");
+	BMPFile * bmpGS = readBMP("Lenna_8-bit.bmp");
+	BMPFile * bmpTC = readBMP("Lenna.bmp");
 	
-	for (int i = 0; i < 256; i++)
-	{
-		printf("%d\t", histRes[i]);
-	}
+	writeBMP(bmpBW, "testwrite.bmp");
+	writeBMP(bmpGS, "testwritegs.bmp");
+	writeBMP(bmpTC, "testwritetc.bmp");
+	writeBMP(GSToBin(bmpGS, 128), "t.bmp");
 }
