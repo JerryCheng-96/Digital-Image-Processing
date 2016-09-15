@@ -23,7 +23,7 @@ BMPFile * readBMP(char * path)
 	fread(fileHeader, sizeof(bmpFileHeader), 1, bitmap);
 	fread(infoHeader, sizeof(bmpInfoHeader), 1, bitmap);
 
-	if (infoHeader->plane == 1 && infoHeader->compression == 0 
+	if (infoHeader->plane == 1 && infoHeader->compression == 0 && infoHeader->weight % 4 == 0
 		&& (infoHeader->depth == 1 || infoHeader->depth == 8 || infoHeader->depth == 24))
 	{
 		pixelArray = (unsigned char*)calloc(infoHeader->imageSize, sizeof(unsigned char));
@@ -47,6 +47,11 @@ BMPFile * readBMP(char * path)
 
 void writeBMP(BMPFile * bitmap, char * path)
 {
+	if (bitmap == NULL)
+	{
+		return;
+	}
+
 	FILE * dest = fopen(path, "wb");
 
 	if (dest == NULL)
@@ -96,20 +101,35 @@ int * GSColorTable()
 
 BMPFile * GSToBin(BMPFile * ori, unsigned char thres)
 {
+	if (ori == NULL)
+	{
+		return NULL;
+	}
+
 	bmpFileHeader* fHeader = (bmpFileHeader*)malloc(sizeof(bmpFileHeader));
 	bmpInfoHeader* iHeader = (bmpInfoHeader*)malloc(sizeof(bmpInfoHeader));
 	BMPFile* res = (BMPFile*)malloc(sizeof(BMPFile));
 	unsigned char* pixelArray;
 	int imageSize = 0;
+	int rowSize = 0;
+	int rowNum = 0;
+	int blanksToFill = 0;
+	int currPos = 0;
+	unsigned char currByte = 0;
+	int resolution = ori->infoHeader->height * ori->infoHeader->weight;
 
-	if (ori->infoHeader->imageSize % 7 != 0)
+	if (ori->infoHeader->weight % 32 != 0)
 	{
-		imageSize = ori->infoHeader->imageSize / 7 + 1;
+		rowSize = (ori->infoHeader->weight / 32 + 1) * 4;
+		blanksToFill = rowSize - ori->infoHeader->weight / 8;
+		
 	}
 	else
 	{
-		imageSize = ori->infoHeader->imageSize / 7;
+		rowSize = ori->infoHeader->weight / 8;
+		blanksToFill = 0;
 	}
+	imageSize = rowSize * ori->infoHeader->height;
 
 	pixelArray = (unsigned char*)calloc(imageSize, sizeof(unsigned char));
 
@@ -130,20 +150,38 @@ BMPFile * GSToBin(BMPFile * ori, unsigned char thres)
 		pixelArray[j] = (unsigned char)0;
 	}
 
-	for (int i = 0; i < ori->infoHeader->imageSize; i++)
+	int i = 0;
+	currPos = 0;
+	while (i < resolution)
 	{
 		if (ori->pixelArray[i] > thres)
 		{
-			res->pixelArray[i / 7] += 128 >> (i % 7);
+			currByte += 128 >> (i % 8);
 		}
+		if ((i + 1) % 8 == 0)
+		{
+			pixelArray[currPos] = currByte;
+			currByte = 0;
+			currPos++;
+		}
+		if ((i + 1) % iHeader->weight == 0)
+		{
+			currPos += blanksToFill;
+		}
+		i++;
 	}
-
+	
 	return res;
 
 }
 
 int * GSHist(BMPFile * bf)
 {
+	if (bf == NULL)
+	{
+		return NULL;
+	}
+
 	int * hist = (int*)malloc(256 * sizeof(int));
 	unsigned char* pixelArray = bf->pixelArray;
 
@@ -159,3 +197,35 @@ int * GSHist(BMPFile * bf)
 
 	return hist;
 }
+
+int * findGSHistValley(int * hist)
+{
+	int * res = (int *)calloc(256, sizeof(int));
+	int * newHist = (int *)calloc(256, sizeof(int));
+	int cnt = 0;
+
+	if (hist == NULL)
+	{
+		return NULL;
+	}
+
+	for (int i = 0; i < 256; i++)
+	{
+		res[i] = -1;
+		newHist[i] = -1;
+	}
+
+	for (int j = 1; j < 255; j++)
+	{
+		if (hist[j] < hist[j - 1] && hist[j] < hist[j + 1])
+		{
+			res[cnt] = j;
+			newHist[cnt] = hist[j];
+			cnt++;
+		}
+	}
+
+	return res;
+}
+
+

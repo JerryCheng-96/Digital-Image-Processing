@@ -19,9 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="applepickinggs.bmp" />
+    <Image Include="cea.bmp" />
+    <Image Include="CTengine.bmp" />
+    <Image Include="CThead.tif" />
     <Image Include="Lenna.bmp" />
     <Image Include="Lenna_8-bit.bmp" />
     <Image Include="Lenna_BW.bmp" />
+    <Image Include="phantomhead.bmp" />
+    <Image Include="t.bmp" />
     <Image Include="testwrite.bmp" />
   </ItemGroup>
   <ItemGroup>

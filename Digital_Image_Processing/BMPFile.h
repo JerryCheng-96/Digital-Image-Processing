@@ -50,5 +50,8 @@ int * binaryColorTable();
 int * GSColorTable();
 
 BMPFile * GSToBin(BMPFile * ori, unsigned char thres);
+//BMPFile * GSToBinByBit(BMPFile * ori, int bit);
 
 int* GSHist(BMPFile* bf);
+int* findGSHistValley(int * hist);
+//int findMidNumber(int * hist);

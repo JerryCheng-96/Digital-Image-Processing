@@ -27,6 +27,24 @@
     <Image Include="testwrite.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="t.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="CTengine.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="phantomhead.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="cea.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="CThead.tif">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="applepickinggs.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
