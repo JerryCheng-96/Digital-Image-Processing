@@ -39,9 +39,6 @@
     <Image Include="cea.bmp">
       <Filter>资源文件</Filter>
     </Image>
-    <Image Include="CThead.tif">
-      <Filter>资源文件</Filter>
-    </Image>
     <Image Include="applepickinggs.bmp">
       <Filter>资源文件</Filter>
     </Image>
