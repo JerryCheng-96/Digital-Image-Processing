@@ -15,69 +15,42 @@
 
 typedef unsigned char BYTE;
 
-class DataMat
+typedef	struct RM
 {
-public:
-	DataMat();
-	~DataMat();
-	enum MatType { rgb = 0, hsl = 1, yuv = 2 };
-
 	int imageHeight;
 	int imageWidth;
-	MatType type;
-
-	static void Gaussian(int imageHeight, int imageWidth, int winSize, double* comp);
-};
-
-
-class RGBMat :
-	public DataMat
-{
-public:
-	RGBMat();
-	RGBMat(int ih, int iw);
-	RGBMat(DataMat* dm);
-	~RGBMat();
-
 	double* pr;
 	double* pg;
 	double* pb;
+} RGBMat;
 
-	void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata);
-	void HSLToRGB(HSLMat* hm);
-	void YUVToRGB(YUVMat* ym);
-
-};
-
-class YUVMat :
-	public DataMat
+typedef struct YM
 {
-public:
-	YUVMat();
-	YUVMat(int ih, int iw);
-	YUVMat(DataMat* dm);
-	~YUVMat();
-
+	int imageHeight;
+	int imageWidth;
 	double* py;
 	double* pu;
 	double* pv;
+} YUVMat;
 
-	void RGBToYUV(RGBMat* rm);
-};
-
-class HSLMat :
-	public DataMat
+typedef struct HM
 {
-public:
-	HSLMat();
-	HSLMat(int ih, int iw);
-	HSLMat(DataMat* dm);
-	~HSLMat();
-
+	int imageHeight;
+	int imageWidth;
 	double* ph;
 	double* ps;
 	double* pl;
+} HSLMat;
 
-	void RGBToHSL(RGBMat* rm);
-};
 
+void Gaussian(int imageHeight, int imageWidth, int winSize, double* comp);
+
+void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm);
+void HSLToRGB(HSLMat* hm, RGBMat* rm);
+void YUVToRGB(YUVMat* ym, RGBMat* rm);
+
+void RGBToYUV(YUVMat* ym, RGBMat* rm);
+
+void RGBToHSL(RGBMat* rm, HSLMat* hm);
+double MinThree(double a, double b, double c);
+double MaxThree(double a, double b, double c);
