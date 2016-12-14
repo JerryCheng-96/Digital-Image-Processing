@@ -26,6 +26,7 @@
     <Image Include="Lenna_8-bit.bmp" />
     <Image Include="Lenna_BW.bmp" />
     <Image Include="phantomhead.bmp" />
+    <Image Include="SSCplx.bmp" />
     <Image Include="t.bmp" />
     <Image Include="testwrite.bmp" />
   </ItemGroup>

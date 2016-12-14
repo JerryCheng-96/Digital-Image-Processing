@@ -42,6 +42,9 @@
     <Image Include="applepickinggs.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="SSCplx.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

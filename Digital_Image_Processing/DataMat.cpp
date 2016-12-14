@@ -1,5 +1,88 @@
 #include "DataMat.h"
 
+void Gaussian(int imageHeight, int imageWidth, int winSize, double * pData)
+{
+	double* gMat = (double*)malloc(winSize * winSize * sizeof(double));
+	double* pMat = (double*)malloc(winSize * winSize * sizeof(double));
+
+	GaussianMat(gMat, winSize, winSize / 6.0);
+
+	for (int i = 0; i < imageHeight; i++)
+	{
+		for (int j = 0; j < imageWidth; j++)
+		{
+			GetWindow(imageHeight, imageWidth, pData, i, j, winSize, pMat);
+			pData[i * imageWidth + j] = DotProduct(gMat, pMat, winSize);
+		}
+	}
+}
+
+void GaussianMat(double * pMat, int winSize, double sigma)
+{
+	int center = winSize / 2;
+	double sum = 0;
+	const double Pi = 3.1415926535;
+
+	for (int i = 0; i < winSize; i++)
+	{
+		for (int j = 0; j < winSize; j++)
+		{
+			pMat[i*winSize + j] = (1 / (2 * Pi * sigma * sigma)) * exp(-((i - center)*(i - center) + (j - center)*(j - center)) / (2 * sigma * sigma));
+			sum += pMat[i*winSize + j];
+		}
+	}
+
+	for (int i = 0; i < winSize * winSize; i++)
+	{
+		pMat[i] /= sum;
+	}
+
+}
+
+void GetWindow(int imageHeight, int imageWidth, double * pData,
+	int x, int y, int winSize, double * pWindow)
+{
+	int i, j, u, v;
+
+	for (i = 0; i < winSize; i++)
+	{
+		for (j = 0; j < winSize; j++)
+		{
+			u = x + i - winSize / 2;
+			v = y + j - winSize / 2;
+			if (u < 0)
+			{
+				u = -u - 1;
+			}
+			if (v < 0)
+			{
+				v = -v - 1;
+			}
+			if (u >= imageHeight)
+			{
+				u = 2 * imageHeight - u - 1;
+			}
+			if (v >= imageWidth)
+			{
+				v = 2 * imageWidth - v - 1;
+			}
+			pWindow[i * winSize + j] = pData[u * imageWidth + v];
+		}
+	}
+}
+
+double DotProduct(double * pMat1, double * pMat2, int size)
+{
+	double res = 0.0;
+
+	for (int i = 0; i < size * size; i++)
+	{
+		res += pMat1[i] * pMat2[i];
+	}
+	return res;
+}
+
+
 void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm)
 {
 	rm->imageHeight = imageHeight;
@@ -13,6 +96,16 @@ void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm)
 		rm->pb[i] = lpdata[i * 3] / 255.0;
 		rm->pg[i] = lpdata[i * 3 + 1] / 255.0;
 		rm->pr[i] = lpdata[i * 3 + 2] / 255.0;
+	}
+}
+
+void DoubleToInt(int imageHeight, int imageWidth, RGBMat * rm, BYTE * pData)
+{
+	for (int i = 0; i < imageHeight * imageWidth; i++)
+	{
+		pData[i * 3] = rm->pb[i] * 255.0;
+		pData[i * 3 + 1] = rm->pg[i] * 255.0;
+		pData[i * 3 + 2] = rm->pr[i] * 255.0;
 	}
 }
 
