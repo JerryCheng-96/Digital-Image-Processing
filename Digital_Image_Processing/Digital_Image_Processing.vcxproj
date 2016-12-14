@@ -31,10 +31,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap.cpp" />
+    <ClCompile Include="DataMat.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMPFile.h" />
+    <ClInclude Include="DataMat.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{355D1A0A-468F-478C-8036-06912A8B961A}</ProjectGuid>
