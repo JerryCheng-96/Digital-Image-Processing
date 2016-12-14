@@ -55,6 +55,26 @@ RGBMat::~RGBMat()
 {
 }
 
+void RGBMat::IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata)
+{
+	for (int i = 0; i < imageHeight * imageWidth; i++)
+	{
+		pb[i] = lpdata[i * 3] / 255.0;
+		pg[i] = lpdata[i * 3 + 1] / 255.0;
+		pr[i] = lpdata[i * 3 + 2] / 255.0;
+	}
+}
+
+void RGBMat::YUVToRGB(YUVMat * ym)
+{
+	for (int i = 0; i < (ym->imageHeight * ym->imageWidth); i++)
+	{
+		pr[i] = ym->py[i] + 1.13983*(ym->pv[i] - (128 / 255.0));
+		pg[i] = ym->py[i] - 0.39465*(ym->pu[i] - (128 / 255.0)) - 0.58060*(ym->pv[i] - (128 / 255.0));
+		pb[i] = ym->py[i] + 2.03211*(ym->pu[i] - (128 / 255.0));
+	}
+}
+
 YUVMat::YUVMat()
 {
 	imageHeight = -1;
@@ -75,8 +95,33 @@ YUVMat::YUVMat(int ih, int iw)
 	pv = (double*)malloc(imageHeight * imageWidth * sizeof(double));
 }
 
+YUVMat::YUVMat(DataMat * dm)
+{
+	imageHeight = dm->imageHeight;
+	imageWidth = dm->imageWidth;
+	type = yuv;
+	py = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+	pu = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+	pv = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+
+	if (dm->type == rgb)
+	{
+		RGBToYUV((RGBMat*)dm);
+	}
+}
+
 YUVMat::~YUVMat()
 {
+}
+
+void YUVMat::RGBToYUV(RGBMat * rm)
+{
+	for (int i = 0; i < (rm->imageHeight * rm->imageWidth); i++)
+	{
+		py[i] = 0.299*(rm->pr[i]) + 0.587*(rm->pg[i]) + 0.114*(rm->pb[i]);
+		pu[i] = -0.169*(rm->pr[i]) - 0.331*(rm->pg[i]) + 0.5*(rm->pb[i]) + (128 / 255.0);
+		pu[i] = 0.5*(rm->pr[i]) - 0.419*(rm->pg[i]) - 0.081*(rm->pb[i]) + (128 / 255.0);
+	}
 }
 
 HSLMat::HSLMat()
@@ -97,6 +142,21 @@ HSLMat::HSLMat(int ih, int iw)
 	ph = (double*)malloc(imageHeight * imageWidth * sizeof(double));
 	ps = (double*)malloc(imageHeight * imageWidth * sizeof(double));
 	pl = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+}
+
+HSLMat::HSLMat(DataMat * dm)
+{
+	imageHeight = dm->imageHeight;
+	imageWidth = dm->imageWidth;
+	type = hsl;
+	ph = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+	ps = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+	pl = (double*)malloc(imageHeight * imageWidth * sizeof(double));
+
+	if (dm->type == rgb)
+	{
+		RGBToHSL((RGBMat*)dm);
+	}
 }
 
 HSLMat::~HSLMat()

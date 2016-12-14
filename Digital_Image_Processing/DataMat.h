@@ -43,7 +43,7 @@ public:
 	double* pg;
 	double* pb;
 
-	void IntToDouble(BYTE* lpdata);
+	void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata);
 	void HSLToRGB(HSLMat* hm);
 	void YUVToRGB(YUVMat* ym);
 
