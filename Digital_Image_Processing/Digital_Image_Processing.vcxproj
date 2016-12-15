@@ -31,9 +31,9 @@
     <Image Include="testwrite.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bitmap.cpp" />
-    <ClCompile Include="DataMat.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="bitmap.c" />
+    <ClCompile Include="DataMat.c" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMPFile.h" />

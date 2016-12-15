@@ -5,16 +5,20 @@
 #endif // !_CRT_SECURE_NO_WARNINGS
 
 #ifndef _STDIO_H_
-#include <iostream>
+#include <stdio.h>
 #define _STDIO_H_
 #endif // !_STDIO_H_
 
+#ifndef _STDLIB_H_
+#include <stdlib.h>
+#define _STDLIB_H_
+#endif // !_STDLIB_H_
+
 #ifndef _MATH_H_
-#include <cmath>
+#include <math.h>
 #define _MATH_H_
 #endif // !_MATH_H_
 
-using namespace std;
 
 typedef unsigned char BYTE;
 
@@ -51,13 +55,17 @@ void GaussianMat(double* pMat, int winSize, double sigma);
 void GetWindow(int imageHeight, int imageWidth, double* pData, int x, int y, int winSize, double* pWindow);
 double DotProduct(double* pMat1, double* pMat2, int size);
 
+void InitRGBMat(int imageHeight, int imageWidth, RGBMat* rm);
 void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm);
 void DoubleToInt(int imageHeight, int imageWidth, RGBMat* rm, BYTE* pData);
 void HSLToRGB(HSLMat* hm, RGBMat* rm);
+//void HSLToRGB(int imageHeight, int imageWidth, double* ph, double* ps, double* pl, double* pr, double* pg, double* pb);
 void YUVToRGB(YUVMat* ym, RGBMat* rm);
 
+void InitYUVMat(int imageHeight, int imageWidth, YUVMat* ym);
 void RGBToYUV(YUVMat* ym, RGBMat* rm);
 
+void InitHSLMat(int imageHeight, int imageWidth, HSLMat* hm);
 void RGBToHSL(RGBMat* rm, HSLMat* hm);
 double MinThree(double a, double b, double c);
 double MaxThree(double a, double b, double c);

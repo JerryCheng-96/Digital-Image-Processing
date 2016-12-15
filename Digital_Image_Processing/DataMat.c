@@ -83,14 +83,17 @@ double DotProduct(double * pMat1, double * pMat2, int size)
 }
 
 
-void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm)
+void InitRGBMat(int imageHeight, int imageWidth, RGBMat* rm)
 {
 	rm->imageHeight = imageHeight;
 	rm->imageWidth = imageWidth;
 	rm->pb = (double*)malloc(rm->imageHeight * rm->imageWidth * sizeof(double));
 	rm->pg = (double*)malloc(rm->imageHeight * rm->imageWidth * sizeof(double));
 	rm->pr = (double*)malloc(rm->imageHeight * rm->imageWidth * sizeof(double));
+}
 
+void IntToDouble(int imageHeight, int imageWidth, BYTE * lpdata, RGBMat* rm)
+{
 	for (int i = 0; i < imageHeight * imageWidth; i++)
 	{
 		rm->pb[i] = lpdata[i * 3] / 255.0;
@@ -118,6 +121,7 @@ void YUVToRGB(YUVMat * ym, RGBMat* rm)
 		rm->pb[i] = ym->py[i] + 2.03211*(ym->pu[i] - (128 / 255.0));
 	}
 }
+
 
 void HSLToRGB(HSLMat * hm, RGBMat* rm)
 {
@@ -152,6 +156,75 @@ void HSLToRGB(HSLMat * hm, RGBMat* rm)
 
 			for (int j = 0; j < 3; j++)
 			{
+				if (t[j] < 0)
+				{
+					t[j] += 1.0;
+				}
+				else if (t[j] > 1)
+				{
+					t[j] -= 1.0;
+				}
+
+				if (t[j] < (1 / 6.0))
+				{
+					t[j] = p + ((q - p) * 6.0 * t[j]);
+				}
+				else if (t[j] >= (1 / 6.0) && t[j] < 0.5)
+				{
+					t[j] = q;
+				}
+				else if (t[j] >= 0.5 && t[j] < (2 / 3.0))
+				{
+					t[j] = p + ((q - p)*6.0*(2 / 3.0 - t[j]));
+				}
+				else
+				{
+					t[j] = p;
+				}
+			}
+
+			rm->pr[i] = t[0];
+			rm->pg[i] = t[1];
+			rm->pb[i] = t[2];
+
+		}
+	}
+}
+
+/*
+void HSLToRGB(int imageHeight, int imageWidth, double* ph, double* ps, double* pl, double* pr, double* pg, double* pb)
+{
+	double q = 0;
+	double p;
+	double hk;
+	double t[3] = { 0.0 };
+
+	for (int i = 0; i < (imageHeight * imageWidth); i++)
+	{
+		if (ps[i] == 0)
+		{
+			pr[i] = pg[i] = pb[i] = pl[i];
+		}
+		else
+		{
+			if (pl[i] < 0.5)
+			{
+				q = pl[i] * (1 + ps[i]);
+			}
+			else
+			{
+				q = pl[i] + ps[i] - (pl[i] * ps[i]);
+			}
+
+			p = 2 * pl[i] - q;
+			hk = ph[i] / 360.0;
+
+			t[0] = hk + 0.33333333333;
+			t[1] = hk;
+			t[2] = hk - 0.33333333333;
+
+			for (int j = 0; j < 3; j++)
+			{
 				if (t[i] < 0)
 				{
 					t[i] += 1.0;
@@ -179,11 +252,22 @@ void HSLToRGB(HSLMat * hm, RGBMat* rm)
 				}
 			}
 
-			rm->pr[i] = t[0];
-			rm->pg[i] = t[1];
-			rm->pb[i] = t[2];
+			pr[i] = t[0];
+			pg[i] = t[1];
+			pb[i] = t[2];
+
 		}
 	}
+}
+*/
+
+void InitYUVMat(int imageHeight, int imageWidth, YUVMat * ym)
+{
+	ym->imageHeight = imageHeight;
+	ym->imageWidth = imageWidth;
+	ym->py = (double*)malloc(ym->imageHeight * ym->imageWidth * sizeof(double));
+	ym->pu = (double*)malloc(ym->imageHeight * ym->imageWidth * sizeof(double));
+	ym->pv = (double*)malloc(ym->imageHeight * ym->imageWidth * sizeof(double));
 }
 
 void RGBToYUV(YUVMat* ym, RGBMat * rm)
@@ -194,6 +278,15 @@ void RGBToYUV(YUVMat* ym, RGBMat * rm)
 		ym->pu[i] = -0.169*(rm->pr[i]) - 0.331*(rm->pg[i]) + 0.5*(rm->pb[i]) + (128 / 255.0);
 		ym->pv[i] = 0.5*(rm->pr[i]) - 0.419*(rm->pg[i]) - 0.081*(rm->pb[i]) + (128 / 255.0);
 	}
+}
+
+void InitHSLMat(int imageHeight, int imageWidth, HSLMat * hm)
+{
+	hm->imageHeight = imageHeight;
+	hm->imageWidth = imageWidth;
+	hm->ph = (double*)malloc(hm->imageHeight * hm->imageWidth * sizeof(double));
+	hm->ps = (double*)malloc(hm->imageHeight * hm->imageWidth * sizeof(double));
+	hm->pl = (double*)malloc(hm->imageHeight * hm->imageWidth * sizeof(double));
 }
 
 void RGBToHSL(RGBMat * rm, HSLMat* hm)

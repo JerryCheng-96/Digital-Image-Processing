@@ -47,13 +47,13 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="bitmap.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="bitmap.cpp">
+    <ClCompile Include="DataMat.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="DataMat.cpp">
+    <ClCompile Include="main.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
